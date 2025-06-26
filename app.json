@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "ProjectFuncpro",
-    "slug": "ProjectFuncpro",
+    "name": "fitcoin",
+    "slug": "fitcoin",
+    "scheme": "fitcoin",
+    "owner": "nbekdev",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +15,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nbekdev.fitcoin",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Чтобы загрузить изображение, необходимо открыть галерею!",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.nbekdev.fitcoin",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -26,7 +34,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      "expo-web-browser",
+      "expo-video"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "78e98d57-1868-4ba3-8647-0a7d2a447141"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/78e98d57-1868-4ba3-8647-0a7d2a447141"
+    }
   }
 }

@@ -1,52 +1,52 @@
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet } from "react-native";
 import "../global.css";
-import { PaperProvider } from "react-native-paper";
 import { Slot, useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Dimensions } from "react-native";
+import { Provider as PaperProvider, MD3LightTheme } from "react-native-paper";
+import useUser from "../hooks/user";
+// import * as WebBrowser from "expo-web-browser";
 
-export default function App() {
+
+const { width, height } = Dimensions.get("window");
+// WebBrowser.maybeCompleteAuthSession();
+export default function MainLayout() {
+  const { user, loading, getUser } = useUser();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   useEffect(() => {
     const checkAuth = async () => {
       const token = await AsyncStorage.getItem("access_token");
-      // AsyncStorage.removeItem("access_token");
-      if (!token) {
+      if (!!token) {
         router.replace("/welcome");
-      }
-      else{
-          router.replace("/training");
+      } else {
+        router.replace("/dashboard/training");
+        getUser();
       }
     };
+
     checkAuth();
   }, []);
+
   return (
-    <SafeAreaProvider>
-      <PaperProvider>
-        <StatusBar style="dark" />
-        <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
-          <View style={styles.inner}>
-            <Slot />
-          </View>
-        </SafeAreaView>
-      </PaperProvider>
-      <Toast topOffset={80} />
-    </SafeAreaProvider>
+    <PaperProvider
+      style={{
+        height: height,
+      }}
+    >
+      <GestureHandlerRootView
+        style={{
+          flex: 1,
+          // paddingBottom: insets.bottom,
+          backgroundColor: "#F4F4F4",
+        }}
+      >
+        <Slot />
+        <Toast topOffset={80} />
+      </GestureHandlerRootView>
+    </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#FCFCFC",
-    
-  },
-  inner: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-});

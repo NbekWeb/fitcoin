@@ -1,15 +1,30 @@
-import { View, Text, Pressable, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { Button } from "react-native-paper";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from "react";
 
 export default function Welcome() {
   const router = useRouter();
+  const { height, width } = Dimensions.get("window");
 
   return (
     <View
-      className="flex-1 relative items-center justify-center h-full"
-      style={styles.container}
+      style={{
+        backgroundColor: "#000",
+        flex: 1,
+        height: height,
+        width: width,
+      }}
     >
+      <StatusBar style="light" />
       <View style={styles.wrapper}>
         <Text style={styles.title}>Начни с Fitcoin!</Text>
         <Text style={styles.paragraph}>
@@ -25,7 +40,7 @@ export default function Welcome() {
             fontSize: 17,
             fontWeight: "bold",
           }}
-          onPress={() => router.push("/login")}
+          onPress={() => router.push("/auth/login")}
         >
           ВПЕРЁД
         </Button>
@@ -49,7 +64,7 @@ export default function Welcome() {
           resizeMode: "contain",
           zIndex: 10,
           position: "absolute",
-          top: -5,
+          top: 0,
           right: 0,
         }}
       />
@@ -62,7 +77,7 @@ export default function Welcome() {
           resizeMode: "contain",
           zIndex: 10,
           position: "absolute",
-          bottom: -20,
+          bottom: -15,
           left: 0,
         }}
       />
@@ -84,10 +99,6 @@ export default function Welcome() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#000",
-    flex: 1,
-  },
   wrapper: {
     minHeight: "max-content",
     width: "100%",
@@ -99,6 +110,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   title: {
     color: "#D7F651",
@@ -114,4 +127,3 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 });
-    

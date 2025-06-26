@@ -1,13 +1,33 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { Button } from "react-native-paper";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import { useEffect } from "react";
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function ByLogin() {
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    iosClientId:
+      "340279459405-g46hb1be0cd8gnlcm32fbaaek5joe26r.apps.googleusercontent.com",
+    expoClientId:
+      "340279459405-s1hjn2ir6s87g1kcc4rrf612cls29ln2.apps.googleusercontent.com", 
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { id_token } = response.params;
+      console.log("✅ Google ID TOKEN:", id_token);
+    }
+  }, [response]);
+
   return (
     <View>
-      <Text style={styles.loginBy}>Или войти через</Text>
+      <Text style={styles.loginBy}>Или войти черезa s</Text>
 
-      <TouchableOpacity style={styles.googleButton}>
+      <TouchableOpacity
+        style={styles.googleButton}
+        onPress={() => promptAsync()}
+      >
         <Image
           source={require("../assets/img/g.png")}
           style={styles.googleIcon}
@@ -15,14 +35,14 @@ export default function ByLogin() {
         />
         <Text style={styles.googleText}>Connect with Google</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.apple}>
+      {/* <TouchableOpacity style={styles.apple}>
         <Image
           source={require("../assets/img/apple.png")}
           style={styles.googleIcon}
           resizeMode="contain"
         />
         <Text style={styles.appleText}>Connect with Apple</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
@@ -70,9 +90,9 @@ const styles = StyleSheet.create({
     height: 55,
     paddingHorizontal: 16,
     width: "100%",
-    marginTop:10
+    marginTop: 10,
   },
-   appleText: {
+  appleText: {
     fontSize: 16,
     lineHeight: 17,
     fontWeight: "bold",

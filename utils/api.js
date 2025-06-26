@@ -1,5 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 let routerInstance = null;
 
@@ -8,13 +9,13 @@ export const setRouter = (router) => {
 };
 
 const instance = axios.create({
-  baseURL: `${process.env.VITE_APP_BASE_URL}`,
+  baseURL: "https://api2.study-sales.ru/api/",
 });
 
 const clearAuth = async () => {
   await AsyncStorage.removeItem("access_token");
   if (routerInstance) {
-    routerInstance.push("/login");
+    routerInstance.push("/auth/login");
   }
 };
 
@@ -47,6 +48,14 @@ function createAxiosResponseInterceptor() {
         if (access_token) {
           await clearAuth();
         }
+      }
+      if (error.message === "Network Error") {
+        Toast.show({
+          type: "error",
+          text1: "Ошибка",
+          text2: `Нет подключения к интернету`,
+          visibilityTime: 2000,
+        });
       }
       instance.interceptors.response.eject(interceptor);
       return Promise.reject(error);
